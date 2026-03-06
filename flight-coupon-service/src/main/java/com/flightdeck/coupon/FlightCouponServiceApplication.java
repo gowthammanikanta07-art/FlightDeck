@@ -1,4 +1,4 @@
-package com.flightdeck.flight_coupon_service;
+package com.flightdeck.coupon;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
