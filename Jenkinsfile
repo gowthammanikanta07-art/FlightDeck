@@ -78,16 +78,8 @@ pipeline {
             steps {
                 dir('flight-info-service') {
                     withSonarQubeEnv('SonarQube') {
-                        bat 'mvn sonar:sonar -o -Dmaven.repo.local=C:\\Users\\HP\\.m2\\repository'
+                        bat 'mvn sonar:sonar -o -Dsonar.qualitygate.wait=true -Dmaven.repo.local=C:\\Users\\HP\\.m2\\repository'
                     }
-                }
-            }
-        }
-
-        stage('Quality Gate - Flight Info Service') {
-            steps {
-                timeout(time: 5, unit: 'MINUTES') {
-                    waitForQualityGate abortPipeline: true
                 }
             }
         }
