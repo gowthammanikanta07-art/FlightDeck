@@ -32,7 +32,7 @@ pipeline {
         stage('Unit Tests - Flight Info Service') {
             steps {
                 dir('flight-info-service') {
-                    bat 'mvn test -Dtest=FlightServiceTest -o -Dmaven.repo.local=C:\\Users\\HP\\.m2\\repository'
+                    bat 'mvn test -Dtest=FlightServiceTest,BookingServiceTest  -o -Dmaven.repo.local=C:\\Users\\HP\\.m2\\repository'
                 }
             }
             post {
@@ -45,7 +45,7 @@ pipeline {
         stage('Integration Tests - Flight Info Service') {
             steps {
                 dir('flight-info-service') {
-                    bat 'mvn test -Dtest=FlightControllerIntegrationTest -o -Dmaven.repo.local=C:\\Users\\HP\\.m2\\repository'
+                    bat 'mvn test -Dtest=FlightControllerIntegrationTest,BookingControllerIntegrationTest -o -Dmaven.repo.local=C:\\Users\\HP\\.m2\\repository'
                 }
             }
             post {
@@ -86,7 +86,7 @@ pipeline {
 
         stage('Quality Gate - Flight Info Service') {
             steps {
-                timeout(time: 2, unit: 'MINUTES') {
+                timeout(time: 5, unit: 'MINUTES') {
                     waitForQualityGate abortPipeline: true
                 }
             }
