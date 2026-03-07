@@ -62,14 +62,16 @@ pipeline {
                 }
             }
             post {
-                always {
-                    recordCoverage(
-                        tools: [[parser: 'JACOCO']],
-                        id: 'jacoco-flight',
-                        name: 'Flight Info Coverage'
-                    )
-                }
-            }
+    			always {
+			        recordCoverage(
+			            tools: [[parser: 'JACOCO']],
+			            id: 'jacoco-flight',
+			            name: 'Flight Info Coverage',
+			            sourceCodeRetention: 'EVERY_BUILD',
+			            sourceDirectories: [[path: 'flight-info-service/src/main/java']]
+			        )
+    			}
+			}
         }
 
         stage('SonarQube Analysis - Flight Info Service') {
