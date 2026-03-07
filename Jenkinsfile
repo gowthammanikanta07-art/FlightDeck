@@ -6,6 +6,14 @@ pipeline {
         jdk 'JDK21'
     }
 
+    options {
+        timeout(time: 30, unit: 'MINUTES')
+    }
+
+    environment {
+        MAVEN_OPTS = '-Dmaven.repo.local=C:\\Users\\HP\\.m2\\repository'
+    }
+
     stages {
         stage('Checkout') {
             steps {
@@ -16,7 +24,7 @@ pipeline {
         stage('Build - Flight Info Service') {
             steps {
                 dir('flight-info-service') {
-                    bat 'mvn clean install -DskipTests -o'
+                    bat 'mvn clean install -DskipTests -o -Dmaven.repo.local=C:\\Users\\HP\\.m2\\repository'
                 }
             }
         }
@@ -24,7 +32,7 @@ pipeline {
         stage('Unit Tests - Flight Info Service') {
             steps {
                 dir('flight-info-service') {
-                    bat 'mvn test -Dtest=FlightServiceTest -o'
+                    bat 'mvn test -Dtest=FlightServiceTest -o -Dmaven.repo.local=C:\\Users\\HP\\.m2\\repository'
                 }
             }
             post {
@@ -37,7 +45,7 @@ pipeline {
         stage('Integration Tests - Flight Info Service') {
             steps {
                 dir('flight-info-service') {
-                    bat 'mvn test -Dtest=FlightControllerIntegrationTest -o'
+                    bat 'mvn test -Dtest=FlightControllerIntegrationTest -o -Dmaven.repo.local=C:\\Users\\HP\\.m2\\repository'
                 }
             }
             post {
@@ -50,15 +58,15 @@ pipeline {
         stage('Code Coverage - Flight Info Service') {
             steps {
                 dir('flight-info-service') {
-                    bat 'mvn jacoco:report -o'
+                    bat 'mvn jacoco:report -o -Dmaven.repo.local=C:\\Users\\HP\\.m2\\repository'
                 }
             }
             post {
                 always {
                     recordCoverage(
                         tools: [[parser: 'JACOCO']],
-                        id: 'jacoco',
-                        name: 'JaCoCo Coverage'
+                        id: 'jacoco-flight',
+                        name: 'Flight Info Coverage'
                     )
                 }
             }
@@ -68,13 +76,13 @@ pipeline {
             steps {
                 dir('flight-info-service') {
                     withSonarQubeEnv('SonarQube') {
-                        bat 'mvn sonar:sonar -o'
+                        bat 'mvn sonar:sonar -o -Dmaven.repo.local=C:\\Users\\HP\\.m2\\repository'
                     }
                 }
             }
         }
 
-        stage('Quality Gate') {
+        stage('Quality Gate - Flight Info Service') {
             steps {
                 timeout(time: 2, unit: 'MINUTES') {
                     waitForQualityGate abortPipeline: true
@@ -85,10 +93,10 @@ pipeline {
 
     post {
         success {
-            echo 'Pipeline passed!'
+            echo 'Pipeline passed! '
         }
         failure {
-            echo 'Pipeline failed!'
+            echo 'Pipeline failed! '
         }
     }
 }
