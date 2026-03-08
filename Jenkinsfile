@@ -131,12 +131,12 @@ pipeline {
         }
 
         stage('SonarQube Analysis - FlightDeck') {
-            steps {
-                withSonarQubeEnv('SonarQube') {
-                    bat 'mvn sonar:sonar -Dsonar.projectKey=flightdeck -Dsonar.projectName=FlightDeck -Dsonar.sources=flight-info-service/src/main/java,flight-coupon-service/src/main/java -Dsonar.java.binaries=flight-info-service/target/classes,flight-coupon-service/target/classes -Dsonar.coverage.jacoco.xmlReportPaths=flight-info-service/target/site/jacoco/jacoco.xml,flight-coupon-service/target/site/jacoco/jacoco.xml -Dsonar.qualitygate.wait=true -Dmaven.repo.local=C:\\Users\\HP\\.m2\\repository'
-                }
-            }
-        }
+		    steps {
+		        withSonarQubeEnv('SonarQube') {
+		            bat 'mvn sonar:sonar -Dsonar.qualitygate.wait=true -Dmaven.repo.local=C:\\Users\\HP\\.m2\\repository'
+		        }
+		    }
+		}
     }
 
     post {
