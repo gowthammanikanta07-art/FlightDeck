@@ -136,7 +136,7 @@ pipeline {
 		            bat 'mvn sonar:sonar -Dsonar.qualitygate.wait=true -Dmaven.repo.local=C:\\Users\\HP\\.m2\\repository'
 		        }
 		    }
-		}
+}
     }
 
     post {

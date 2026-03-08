@@ -21,17 +21,8 @@
         <sonar.projectKey>flightdeck</sonar.projectKey>
         <sonar.projectName>FlightDeck</sonar.projectName>
         <sonar.host.url>http://localhost:9000</sonar.host.url>
-        <sonar.coverage.jacoco.xmlReportPaths>
-            flight-info-service/target/site/jacoco/jacoco.xml,
-            flight-coupon-service/target/site/jacoco/jacoco.xml
+       <sonar.coverage.jacoco.xmlReportPaths>
+            target/site/jacoco/jacoco.xml
         </sonar.coverage.jacoco.xmlReportPaths>
-        <sonar.sources>
-            flight-info-service/src/main/java,
-            flight-coupon-service/src/main/java
-        </sonar.sources>
-        <sonar.java.binaries>
-            flight-info-service/target/classes,
-            flight-coupon-service/target/classes
-        </sonar.java.binaries>
     </properties>
 </project>
