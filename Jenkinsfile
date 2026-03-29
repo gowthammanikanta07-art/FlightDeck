@@ -133,10 +133,15 @@ pipeline {
         stage('SonarQube Analysis - FlightDeck') {
 		    steps {
 		        withSonarQubeEnv('SonarQube') {
-		            bat 'mvn sonar:sonar -Dsonar.qualitygate.wait=true -Dmaven.repo.local=C:\\Users\\HP\\.m2\\repository'
+		            bat 'mvn sonar:sonar'
 		        }
 		    }
-}
+		}
+		stage('Quality Gate - FlightDeck') {
+    		timeout(time: 5, unit: 'MINUTES') {
+       			 waitForQualityGate abortPipeline: true     
+            }
+        }
     }
 
     post {
