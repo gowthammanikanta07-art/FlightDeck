@@ -137,12 +137,15 @@ pipeline {
 		        }
 		    }
 		}
+		
 		stage('Quality Gate - FlightDeck') {
-    		timeout(time: 5, unit: 'MINUTES') {
-       			 waitForQualityGate abortPipeline: true 
-            }
-        }
-    }
+			steps {
+	    		timeout(time: 5, unit: 'MINUTES') {
+	       			 waitForQualityGate abortPipeline: true 
+	            	}
+            	}	
+        	}
+    	}
 
     post {
         success {
