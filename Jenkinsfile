@@ -147,7 +147,13 @@ pipeline {
         	}
     	}
     	
-    	stage('Docker Build & Push') {
+    	stage('Docker Test') {
+		    steps {
+		        bat 'docker version'
+		    }
+		}
+		
+    	/*stage('Docker Build & Push') {
 		    steps {
 		        withCredentials([string(credentialsId: 'docker-hub-token', variable: 'DOCKER_TOKEN')]) {
 		            bat """
@@ -174,7 +180,7 @@ pipeline {
 		            """
 		        }
 		    }
-		}
+		}*/
 
     post {
         success {
