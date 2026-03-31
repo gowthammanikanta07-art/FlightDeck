@@ -15,6 +15,7 @@ pipeline {
     }
 
     stages {
+
         stage('Checkout') {
             steps {
                 checkout scm
@@ -131,22 +132,28 @@ pipeline {
         }
 
         stage('SonarQube Analysis - FlightDeck') {
-		    steps {
-		        withSonarQubeEnv('SonarQube') {
-		            bat 'mvn sonar:sonar'
-		        }
-		    }
-		}
-		
-		stage('Quality Gate - FlightDeck') {
-			steps {
-	    		timeout(time: 5, unit: 'MINUTES') {
-	       			 waitForQualityGate abortPipeline: true 
-	            	}
-            	}	
-        	}
-    	}
-    	
+            steps {
+                withSonarQubeEnv('SonarQube') {
+                    bat 'mvn sonar:sonar'
+                }
+            }
+        }
+
+        stage('Quality Gate - FlightDeck') {
+            steps {
+                timeout(time: 5, unit: 'MINUTES') {
+                    waitForQualityGate abortPipeline: true
+                }
+            }
+        }
+
+        stage('Docker Test') {
+            steps {
+                bat 'docker version'
+            }
+        }
+
+    } 
 
     post {
         success {
@@ -156,4 +163,5 @@ pipeline {
             echo 'FlightDeck pipeline failed!'
         }
     }
-}
+
+} 
