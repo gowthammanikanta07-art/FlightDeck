@@ -152,6 +152,36 @@ pipeline {
                 bat 'docker version'
             }
         }
+        
+        stage('Docker Build & Push') {
+		    steps {
+		        withCredentials([string(credentialsId: 'docker-hub-token', variable: 'DOCKER_TOKEN')]) {
+		            bat """
+		                echo %DOCKER_TOKEN% | docker login -u gowthamdocker878 --password-stdin
+		
+		                REM ── flight-info-service ───────────────────────────────
+		                docker build ^
+		                    -t gowthamdocker878/flight-info-service:%BUILD_NUMBER% ^
+		                    -t gowthamdocker878/flight-info-service:latest ^
+		                    .\\flight-info-service
+		
+		                docker push gowthamdocker878/flight-info-service:%BUILD_NUMBER%
+		                docker push gowthamdocker878/flight-info-service:latest
+		
+		                REM ── flight-coupon-service ─────────────────────────────
+		                docker build ^
+		                    -t gowthamdocker878/flight-coupon-service:%BUILD_NUMBER% ^
+		                    -t gowthamdocker878/flight-coupon-service:latest ^
+		                    .\\flight-coupon-service
+		
+		                docker push gowthamdocker878/flight-coupon-service:%BUILD_NUMBER%
+		                docker push gowthamdocker878/flight-coupon-service:latest
+		
+		                docker logout
+		            """
+		        }
+		    }
+		}
 
     } 
 
