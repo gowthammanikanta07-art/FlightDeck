@@ -146,6 +146,35 @@ pipeline {
             	}	
         	}
     	}
+    	
+    	stage('Docker Build & Push') {
+		    steps {
+		        withCredentials([string(credentialsId: 'docker-hub-token', variable: 'DOCKER_TOKEN')]) {
+		            bat """
+		                echo %DOCKER_TOKEN% | docker login -u YOUR_DOCKERHUB_USERNAME --password-stdin
+		
+		                docker build ^
+		                    -t YOUR_DOCKERHUB_USERNAME/flight-info-service:%BUILD_NUMBER% ^
+		                    -t YOUR_DOCKERHUB_USERNAME/flight-info-service:latest ^
+		                    .\\flight-info-service
+		
+		                docker push YOUR_DOCKERHUB_USERNAME/flight-info-service:%BUILD_NUMBER%
+		                docker push YOUR_DOCKERHUB_USERNAME/flight-info-service:latest
+		
+		                
+		                docker build ^
+		                    -t YOUR_DOCKERHUB_USERNAME/flight-coupon-service:%BUILD_NUMBER% ^
+		                    -t YOUR_DOCKERHUB_USERNAME/flight-coupon-service:latest ^
+		                    .\\flight-coupon-service
+		
+		                docker push YOUR_DOCKERHUB_USERNAME/flight-coupon-service:%BUILD_NUMBER%
+		                docker push YOUR_DOCKERHUB_USERNAME/flight-coupon-service:latest
+		
+		                docker logout
+		            """
+		        }
+		    }
+		}
 
     post {
         success {
