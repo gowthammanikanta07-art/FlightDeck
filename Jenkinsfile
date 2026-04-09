@@ -46,8 +46,10 @@ pipeline {
         stage('Integration Tests - Flight Info Service') {
             steps {
                 dir('flight-info-service') {
-                    bat 'mvn test -Dtest=FlightControllerIntegrationTest,BookingControllerIntegrationTest -o -Dmaven.repo.local=C:\\Users\\HP\\.m2\\repository'
-                }
+        			withCredentials([string(credentialsId: 'db-password', variable: 'PASS')]) {
+                    	bat 'mvn test -Dspring.datasource.password=${PASS} -Dtest=FlightControllerIntegrationTest,BookingControllerIntegrationTest -o -Dmaven.repo.local=C:\\Users\\HP\\.m2\\repository'
+                	}
+            	}
             }
             post {
                 always {
@@ -88,8 +90,10 @@ pipeline {
         stage('Integration Tests - Coupon Service') {
             steps {
                 dir('flight-coupon-service') {
-                    bat 'mvn test -Dtest=CouponControllerIntegrationTests -o -Dmaven.repo.local=C:\\Users\\HP\\.m2\\repository'
-                }
+					withCredentials([string(credentialsId: 'db-password', variable: 'PASS')]) {
+                    bat 'mvn test -Dspring.datasource.password=${PASS} -Dtest=CouponControllerIntegrationTests -o -Dmaven.repo.local=C:\\Users\\HP\\.m2\\repository'
+                	}
+            	}
             }
             post {
                 always {
@@ -144,12 +148,6 @@ pipeline {
                 timeout(time: 5, unit: 'MINUTES') {
                     waitForQualityGate abortPipeline: true
                 }
-            }
-        }
-
-        stage('Docker Test') {
-            steps {
-                bat 'docker version'
             }
         }
         
