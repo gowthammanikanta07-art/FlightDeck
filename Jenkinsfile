@@ -195,10 +195,12 @@ pipeline {
 		
 		                kubectl apply -f k8s/app-config.yaml
 		
-		                kubectl apply -f k8s/flight-coupon-deployment.yaml
+						kubectl apply -f k8s/flight-coupon-deployment.yaml
+						kubectl patch deployment flight-coupon-service -p '{\"spec\":{\"template\":{\"metadata\":{\"labels\":{\"build_number\":\"${BUILD_NUMBER}\"}}}}}'" 
 		                kubectl rollout status deployment/flight-coupon-service --timeout=120s
 		
 		                kubectl apply -f k8s/flight-info-deployment.yaml
+		                sh "kubectl patch deployment flight-info-service -p '{\"spec\":{\"template\":{\"metadata\":{\"labels\":{\"build_number\":\"${BUILD_NUMBER}\"}}}}}'"
 		                kubectl rollout status deployment/flight-info-service --timeout=120s
 		            '''
 		        }
