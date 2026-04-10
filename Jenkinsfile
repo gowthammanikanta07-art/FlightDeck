@@ -187,20 +187,20 @@ pipeline {
 		            file(credentialsId: 'kubeconfig', variable: 'KUBECONFIG'),
 		            string(credentialsId: 'db-password', variable: 'DB_PASSWORD')
 		        ]) {
-		            bat '''
+		            bat """
 		
-		                kubectl create secret generic app-secrets \
-		                    --from-literal=db-password=$DB_PASSWORD \
+		                kubectl create secret generic app-secrets ^
+		                    --from-literal=db-password=%DB_PASSWORD% ^
 		                    --dry-run=client -o yaml | kubectl apply -f -
 		
 		                kubectl apply -f k8s/app-config.yaml
 		
 						kubectl apply -f k8s/flight-coupon-deployment.yaml
-						kubectl rollout status deployment/flight-coupon-service --timeout=120s
+						kubectl rollout status deployment/flight-coupon-service --timeout=300s
 		
 		                kubectl apply -f k8s/flight-info-deployment.yaml
-		                kubectl rollout status deployment/flight-info-service --timeout=120s
-		            '''
+		                kubectl rollout status deployment/flight-info-service --timeout=300s
+		            """
 		        }
 		    }
 		}
