@@ -206,7 +206,7 @@ pipeline {
 		}
 		stage('Karate API Tests') {
 		    steps {
-		        bat 'sleep 10'
+		        sleep(time: 10, unit: 'SECONDS')   // Groovy — no bat needed, works on Windows and Linux
 		        dir('flight-info-service') {
 		            bat 'mvn test -Dtest=KarateRunner -q'
 		        }
