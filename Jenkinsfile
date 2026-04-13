@@ -204,7 +204,23 @@ pipeline {
 		        }
 		    }
 		}
-
+		stage('Karate API Tests') {
+		    steps {
+		        bat 'sleep 10'
+		        dir('flight-info-service') {
+		            bat 'mvn test -Dtest=KarateRunner -q'
+		        }
+		        dir('flight-coupon-service') {
+		            bat 'mvn test -Dtest=KarateRunner -q'
+		        }
+		    }
+		    post {
+		        always {
+		            junit allowEmptyResults: true,
+		                  testResults: '**/karate-reports/*.xml'
+		        }
+		    }
+		}
     } 
 
     post {
