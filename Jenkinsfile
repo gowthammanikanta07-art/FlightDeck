@@ -218,7 +218,11 @@ pipeline {
 		        always {
 		            junit allowEmptyResults: true,
 		                  testResults: '**/karate-reports/*.xml'
-		        }
+		                  
+		            cucumber buildStatus: 'UNSTABLE',
+		                fileIncludePattern: '**/karate-reports/*.json',
+		                sortingMethod: 'ALPHABETICAL'
+				        }
 		    }
 		}
     } 
