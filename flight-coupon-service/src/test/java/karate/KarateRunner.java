@@ -6,6 +6,6 @@ class KarateRunner {
 
     @Karate.Test
     Karate testAll() {
-        return Karate.run()..outputCucumberJson(true).relativeTo(getClass());
+        return Karate.run().outputCucumberJson(true).relativeTo(getClass());
     }
 }
