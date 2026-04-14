@@ -2,9 +2,17 @@ Feature: flight-info-service — bookings API
 
   Background:
     * url 'http://localhost:30081'
-
+    * def flightId = 0
+    
+  Scenario: get a valid flight ID to use in booking tests
+    Given path '/api/flights'
+    When method GET
+    Then status 200
+    And assert response.length > 0
+    * set flightId = response[0].id
+    
   Scenario: book and retrieve a flight booking
-    Given path '/api/flights/580/book'
+    Given path '/api/flights/' + flightId + '/book'
     And request { passengerName: 'Test User', passengerEmail: 'test@email.com' }
     When method POST
     Then status 201
@@ -35,25 +43,9 @@ Feature: flight-info-service — bookings API
     Given path '/api/flights/bookings/99999'
     When method GET
     Then status 404
-    
-  Scenario: book and retrieve a flight booking
-    Given path '/api/flights/554/book'
-    And request { passengerName: 'Test User', passengerEmail: 'test@email.com' }
-    When method POST
-    Then status 201
-    * def bookingId = response.bookingId
-    And match response.bookingReference == '#string'
-    And match response.finalPrice == '#number'
-    And match response.message == 'Booking confirmed!'
-
-    Given path '/api/flights/bookings/' + bookingId
-    When method GET
-    Then status 200
-    And match response.bookingId == bookingId
-    And match response.passengerName == 'Test User'
 
   Scenario: book with coupon shows inter-service communication
-    Given path '/api/flights/580/book'
+    Given path path '/api/flights/' + flightId + '/book'
     And request
       """
       {
