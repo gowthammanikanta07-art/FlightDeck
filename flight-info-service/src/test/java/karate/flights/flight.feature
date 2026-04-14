@@ -10,7 +10,7 @@ Feature: flight-info-service — flights API
     And match response == '#[] #object'
 
   Scenario: get flight by valid ID
-    Given path '/api/flights/554'
+    Given path '/api/flights/580'
     When method GET
     Then status 200
     And match response.flightNumber == '#string'

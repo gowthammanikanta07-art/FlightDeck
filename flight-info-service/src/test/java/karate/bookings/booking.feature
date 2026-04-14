@@ -4,7 +4,7 @@ Feature: flight-info-service — bookings API
     * url 'http://localhost:30081'
 
   Scenario: book and retrieve a flight booking
-    Given path '/api/flights/554/book'
+    Given path '/api/flights/580/book'
     And request { passengerName: 'Test User', passengerEmail: 'test@email.com' }
     When method POST
     Then status 201
@@ -26,7 +26,7 @@ Feature: flight-info-service — bookings API
     Then status 400
 
   Scenario: missing passenger name returns bad request
-    Given path '/api/flights/554/book'
+    Given path '/api/flights/580/book'
     And request { passengerEmail: 'test@email.com' }
     When method POST
     Then status 400
@@ -53,7 +53,7 @@ Feature: flight-info-service — bookings API
     And match response.passengerName == 'Test User'
 
   Scenario: book with coupon shows inter-service communication
-    Given path '/api/flights/554/book'
+    Given path '/api/flights/580/book'
     And request
       """
       {
