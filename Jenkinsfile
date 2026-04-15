@@ -179,6 +179,11 @@ pipeline {
 		            """
 		        }
 		    }
+		    post {
+                 always {
+                     jiraSendBuildInfo site: 'student-team-207.atlassian.net' 
+                 }
+             }
 		}
 		
 		stage('Deploy to Kubernetes') {
@@ -203,6 +208,11 @@ pipeline {
 		            """
 		        }
 		    }
+		    post {
+                 always {
+                     jiraSendDeploymentInfo site: 'student-team-207.atlassian.net', environmentId: '1', environmentName: 'Dev', environmentType: 'Development'
+                 }
+             }
 		}
 		stage('Karate API Tests') {
 		    steps {
