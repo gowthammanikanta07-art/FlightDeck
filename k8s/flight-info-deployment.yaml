@@ -1,0 +1,49 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: flight-info-service
+  labels:
+    app: flight-info-service
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: flight-info-service
+  template:
+    metadata:
+      labels:
+        app: flight-info-service
+    spec:
+      containers:
+        - name: flight-info-service
+          image: gowthamdocker878/flight-info-service:latest
+          ports:
+            - containerPort: 8081
+          envFrom:
+            - configMapRef:
+                name: app-config
+          env:
+            - name: SPRING_DATASOURCE_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: app-secrets
+                  key: db-password
+          readinessProbe:
+            httpGet:
+              path: /api/flights
+              port: 8081
+            initialDelaySeconds: 30
+            periodSeconds: 10
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: flight-info-service
+spec:
+  type: NodePort
+  selector:
+    app: flight-info-service
+  ports:
+    - port: 8081
+      targetPort: 8081
+      nodePort: 30081

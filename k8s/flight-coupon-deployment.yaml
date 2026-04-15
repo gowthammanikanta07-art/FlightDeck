@@ -1,0 +1,49 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: flight-coupon-service
+  labels:
+    app: flight-coupon-service
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: flight-coupon-service
+  template:
+    metadata:
+      labels:
+        app: flight-coupon-service
+    spec:
+      containers:
+        - name: flight-coupon-service
+          image: gowthamdocker878/flight-coupon-service:latest
+          ports:
+            - containerPort: 8082
+          envFrom:
+            - configMapRef:
+                name: app-config
+          env:
+            - name: SPRING_DATASOURCE_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: app-secrets
+                  key: db-password
+          readinessProbe:
+            httpGet:
+              path: /api/coupons
+              port: 8082
+            initialDelaySeconds: 30
+            periodSeconds: 10
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: flight-coupon-service
+spec:
+  type: NodePort
+  selector:
+    app: flight-coupon-service
+  ports:
+    - port: 8082
+      targetPort: 8082
+      nodePort: 30082
