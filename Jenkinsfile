@@ -210,7 +210,7 @@ pipeline {
 		    }
 		    post {
                  always {
-                     jiraSendDeploymentInfo site: 'student-team-207.atlassian.net', environmentId: '1', environmentName: 'Dev', environmentType: 'Development'
+                     jiraSendDeploymentInfo site: 'student-team-207.atlassian.net', environmentId: '1', environmentName: 'dev', environmentType: 'development'
                  }
              }
 		}
